@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transcript Search</title>
+    <script>
+        function updateSliderValue(value) {
+            document.getElementById('sliderValue').textContent = value + '%';
+        }
+    </script>
+</head>
+<body>
+    <h1>Transcript Search</h1>
+    <form method="post">
+        <input type="text" name="search_term" placeholder="Enter search term" required>
+        <label>Match Percentage: <span id="sliderValue">100%</span></label>
+        <input type="range" name="match_percentage" min="0" max="100" value="100" oninput="updateSliderValue(this.value)">
+        <input type="submit" value="Search">
+    </form>
+
+    {% if matches %}
+        <h2>Results for "{{ search_term }}" at {{ match_percentage }}% match:</h2>
+        <ul>
+            {% for match in matches %}
+        <p>
+        Match found in Season {{ match[0] }}, Episode {{ match[1] }}, Line {{ match[2] }}.
+    <a href="{{ url_for('transcripts', filename=match[3]) }}" target="_blank">View Transcript</a>
+  </p>
+{% endfor %}
+        </ul>
+    {% else %}
+        <p>No matches found.</p>
+    {% endif %}
+
+    <hr/>
+
+    <h1>All Transcripts</h1>
+
+    {% if seasons %}
+        {% for season, episodes in seasons.items() %}
+            <details>
+                <summary>{{ season }}</summary>
+                <ul>
+                    {% for episode in episodes %}
+                        <li><a href="{{ url_for('transcripts', filename=season + '/' + episode + '.txt') }}">{{ episode }}</a></li>
+                    {% endfor %}
+                </ul>
+            </details>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
