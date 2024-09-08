@@ -1,13 +1,11 @@
 services:
   saul-spot:
-    container_name: saul-spot
     build: .
     command: gunicorn -w 2 -b 0.0.0.0:8000 app:app
     volumes:
       - ./transcripts:/app/transcripts
 
   cloudflared:
-    container_name: wiki-cloudflared
     restart: unless-stopped
     image: cloudflare/cloudflared:latest
     command: tunnel run
