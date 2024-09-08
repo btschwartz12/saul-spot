@@ -2,3 +2,4 @@ env/
 backup/
 out.txt
 .DS_Store
+.env
